@@ -419,7 +419,7 @@ footer .wrap{padding-block:16px}
 </g>
 </svg>
   <div class="ttl"><small>Projektseite · Umbau &amp; Lichtdesign</small><h1>Knappenberg 51</h1></div>
-  <div class="who">Stand: <b>24.10.2026, 21:48</b><br>
+  <div class="who">Stand: <b>24.10.2026, 21:54</b><br>
     <label for="viewAs" class="hint">Mein Gewerk</label>
     <select id="viewAs">
       <option value="egger">Egger Licht Design</option>
@@ -482,16 +482,13 @@ footer .wrap{padding-block:16px}
 </div>
 
 <div data-p="mat" hidden>
-  <section><h2 id="matTitle">Material</h2>
-    <div class="note" id="matInfo"></div>
-    <div class="grid g4" id="matKpis" style="margin-block:16px"></div>
-    <div class="tbl"><table><thead><tr><th>Pos.</th><th>Artikel</th><th>Best.-Nr.</th><th>Menge</th><th>Geliefert</th><th>Vor Ort</th></tr></thead><tbody id="matRows"></tbody></table></div>
-    <div class="box" id="matReport" style="margin-top:16px" hidden>
-      <p style="margin-top:0"><b>Noch nicht gemeldete Änderungen:</b> <span id="matChanges"></span></p>
-      <p><a class="btn" id="matMail" href="#">Änderungen per Mail melden</a> <button class="btn sec" type="button" id="matReset">Verwerfen</button></p>
-      <p class="hint" style="margin-bottom:0">Ihre Haken sind zunächst nur auf diesem Gerät sichtbar. Nach der Mail wird der Stand für alle übernommen.</p>
-    </div>
-  </section>
+  <div class="grid g4" id="matKpis" style="margin-bottom:20px"></div>
+  <div id="matAll" class="grid" style="gap:28px"></div>
+  <div class="box" id="matReport" style="margin-top:16px" hidden>
+    <p style="margin-top:0"><b>Noch nicht gemeldete Änderungen:</b> <span id="matChanges"></span></p>
+    <p><a class="btn" id="matMail" href="#">Änderungen per Mail melden</a> <button class="btn sec" type="button" id="matReset">Verwerfen</button></p>
+    <p class="hint" style="margin-bottom:0">Ihre Haken sind zunächst nur auf diesem Gerät sichtbar. Nach der Mail wird der Stand für alle übernommen.</p>
+  </div>
 </div>
 
 <div data-p="dec" hidden>
@@ -601,24 +598,28 @@ var DEC=[
 function renderDec(){
   document.getElementById("decs").innerHTML=DEC.map(function(x){return'<div class="dec"><h3>'+esc(x.t)+'</h3><span class="pill p-'+(x.s==="ok"?"ok":"wait")+'">'+(x.s==="ok"?"entschieden":"wartet auf Freigabe")+'</span><p>'+esc(x.w)+'</p>'+(x.img?'<p><img src="'+x.img+'" alt="'+esc(x.t)+'" style="width:100%;height:auto;display:block" loading="lazy"></p>':'')+'<p class="hint">'+(x.s==="ok"?"Quelle: ":"Entscheidet: ")+esc(x.by)+(x.due?" · "+x.due:"")+'</p>'+'</div>'}).join("");
 }
-var MAT={"titel": "Bestellung Bad unten", "lieferant": "Bad & Energie", "bedarf": "bis KW 46 (09.–13.11.)", "hinweis": "Bestellung wird telefonisch am 27.10. abgestimmt.", "positionen": [{"pos": 1, "artikel": "Badheizkörper Bela 2.0", "nr": "AQBHBE170.60ER", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 2, "artikel": "Doppelhandtuchhalter (Aura)", "nr": "AQASAUDHH1", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 3, "artikel": "Badetuchhalter 60 cm (Aura)", "nr": "AQASAUBH60", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 4, "artikel": "Haltegriff 30 cm (Aura)", "nr": "AQASAUHG", "menge": 3, "geliefert": "", "vorort": ""}, {"pos": 5, "artikel": "Seifenspender mit Hebelbetätigung (Aura)", "nr": "AQASAUPH", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 6, "artikel": "Seifenkorb (Aura)", "nr": "AQASAUSKG", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 7, "artikel": "Toilettenpapierhalter (Aura)", "nr": "AQASAURH", "menge": 2, "geliefert": "", "vorort": ""}, {"pos": 8, "artikel": "Reserve-Rollenhalter (Aura)", "nr": "AQASAURRHO", "menge": 2, "geliefert": "", "vorort": ""}, {"pos": 9, "artikel": "Toilettenbürstengarnitur (Aura)", "nr": "AQASAUBG", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 10, "artikel": "Halter für Haartrockner (Una)", "nr": "AQHAAR", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 11, "artikel": "Eckschwammkorb (Varia)", "nr": "AQASVAESCHK1", "menge": 2, "geliefert": "", "vorort": ""}, {"pos": 12, "artikel": "Ablageplatte 60 cm (Pura)", "nr": "AQASPUAB60", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 13, "artikel": "Handtuchhaken (Aura)", "nr": "AQASAUHTH", "menge": 2, "geliefert": "", "vorort": ""}, {"pos": 14, "artikel": "Glaswischer (Pura)", "nr": "AQASPUGW", "menge": 1, "geliefert": "", "vorort": ""}]};
-var pend={};try{pend=JSON.parse(localStorage.getItem("k51mat")||"{}")}catch(e){}
-MAT.positionen.forEach(function(x){["geliefert","vorort"].forEach(function(k){var key=x.pos+"_"+k;if(key in pend&&pend[key]===!!x[k])delete pend[key]})});
-function mstate(x,k){var key=x.pos+"_"+k;return key in pend?pend[key]:!!x[k]}
+var MAT={"bestellungen": [{"titel": "Bestellung Bad unten", "lieferant": "Bad & Energie", "bedarf": "Benötigt bis KW 46 (09.–13.11.)", "hinweis": "Bestellung wird telefonisch am 27.10. abgestimmt.", "positionen": [{"pos": 1, "artikel": "Badheizkörper Bela 2.0", "nr": "AQBHBE170.60ER", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 2, "artikel": "Doppelhandtuchhalter (Aura)", "nr": "AQASAUDHH1", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 3, "artikel": "Badetuchhalter 60 cm (Aura)", "nr": "AQASAUBH60", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 4, "artikel": "Haltegriff 30 cm (Aura)", "nr": "AQASAUHG", "menge": 3, "geliefert": "", "vorort": ""}, {"pos": 5, "artikel": "Seifenspender mit Hebelbetätigung (Aura)", "nr": "AQASAUPH", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 6, "artikel": "Seifenkorb (Aura)", "nr": "AQASAUSKG", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 7, "artikel": "Toilettenpapierhalter (Aura)", "nr": "AQASAURH", "menge": 2, "geliefert": "", "vorort": ""}, {"pos": 8, "artikel": "Reserve-Rollenhalter (Aura)", "nr": "AQASAURRHO", "menge": 2, "geliefert": "", "vorort": ""}, {"pos": 9, "artikel": "Toilettenbürstengarnitur (Aura)", "nr": "AQASAUBG", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 10, "artikel": "Halter für Haartrockner (Una)", "nr": "AQHAAR", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 11, "artikel": "Eckschwammkorb (Varia)", "nr": "AQASVAESCHK1", "menge": 2, "geliefert": "", "vorort": ""}, {"pos": 12, "artikel": "Ablageplatte 60 cm (Pura)", "nr": "AQASPUAB60", "menge": 1, "geliefert": "", "vorort": ""}, {"pos": 13, "artikel": "Handtuchhaken (Aura)", "nr": "AQASAUHTH", "menge": 2, "geliefert": "", "vorort": ""}, {"pos": 14, "artikel": "Glaswischer (Pura)", "nr": "AQASPUGW", "menge": 1, "geliefert": "", "vorort": ""}], "id": "alva", "label_geliefert": "Geliefert"}, {"id": "ik82798", "titel": "Rechnung 82798 vom 21.10.", "lieferant": "Interkeramik Klagenfurt", "bedarf": "Ware reserviert, Abholung ab Lager", "hinweis": "Wer wann abholt, klärt Michael Carpi. „Abgeholt“ = Ware ist beim Abholer.", "label_geliefert": "Abgeholt", "positionen": [{"pos": 1, "artikel": "NOJA Waschtischset weiß glänzend", "nr": "MH10622", "menge": 1, "bad": "Bad unten", "geliefert": "", "vorort": ""}, {"pos": 2, "artikel": "ALLIANCE Spiegelschrank 120 × 65 × 15 cm", "nr": "MH24593", "menge": 1, "bad": "Bad unten", "geliefert": "", "vorort": ""}]}, {"id": "ik82817", "titel": "Rechnung 82817 vom 24.10.", "lieferant": "Interkeramik Klagenfurt", "bedarf": "Ware reserviert, Abholung ab Lager", "hinweis": "Wer wann abholt, klärt Michael Carpi. „Abgeholt“ = Ware ist beim Abholer.", "label_geliefert": "Abgeholt", "positionen": [{"pos": 1, "artikel": "SENA Spiegel 60 × 80 cm", "nr": "MH16908", "menge": 1, "bad": "Bad oben", "geliefert": "", "vorort": ""}, {"pos": 2, "artikel": "BOREAL LED-Leuchte 30 cm", "nr": "MH84122", "menge": 1, "bad": "Bad oben", "geliefert": "", "vorort": ""}, {"pos": 3, "artikel": "CLEAR Eckdusche 86,5–89 cm, H 195, Chrom", "nr": "MH16726", "menge": 1, "bad": "Bad unten", "geliefert": "", "vorort": ""}]}]};
+var pend={};try{pend=JSON.parse(localStorage.getItem("k51mat2")||"{}")}catch(e){}
+var KS=["geliefert","vorort"];
+function key(b,x,k){return b.id+"|"+x.pos+"|"+k}
+MAT.bestellungen.forEach(function(b){b.positionen.forEach(function(x){KS.forEach(function(k){var q=key(b,x,k);if(q in pend&&pend[q]===!!x[k])delete pend[q]})})});
+function mstate(b,x,k){var q=key(b,x,k);return q in pend?pend[q]:!!x[k]}
+function findPos(q){var a=q.split("|"),b=MAT.bestellungen.filter(function(y){return y.id===a[0]})[0];return{b:b,x:b.positionen.filter(function(y){return String(y.pos)===a[1]})[0],k:a[2]}}
 function renderMat(){
-  document.getElementById("matTitle").textContent=MAT.titel+" · "+MAT.lieferant;
-  document.getElementById("matInfo").innerHTML="<b>Benötigt "+esc(MAT.bedarf)+".</b> "+esc(MAT.hinweis);
-  var P=MAT.positionen,st=P.reduce(function(a,x){return a+x.menge},0),g=P.filter(function(x){return mstate(x,"geliefert")}).length,v=P.filter(function(x){return mstate(x,"vorort")}).length;
-  document.getElementById("matKpis").innerHTML=[[P.length+" / "+st,"Positionen / Stück"],[g+" / "+P.length,"geliefert"],[v+" / "+P.length,"vor Ort"]].map(function(k){return'<div class="kpi"><b>'+k[0]+'</b><span>'+k[1]+'</span></div>'}).join("");
-  document.getElementById("matRows").innerHTML=P.map(function(x){function cb(k){var on=mstate(x,k),p=(x.pos+"_"+k) in pend;return'<label style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="m'+x.pos+k+'" data-k="'+x.pos+'_'+k+'"'+(on?" checked":"")+'><span class="pill p-'+(p?"wait":on?"ok":"open")+'">'+(p?"noch melden":on?(x[k]?esc(x[k]):"ja"):"offen")+'</span></label>'}
-    return'<tr><td class="num">'+x.pos+'</td><td>'+esc(x.artikel)+'</td><td class="num">'+esc(x.nr)+'</td><td class="num">'+x.menge+'</td><td>'+cb("geliefert")+'</td><td>'+cb("vorort")+'</td></tr>'}).join("");
-  document.querySelectorAll("#matRows input").forEach(function(c){c.onchange=function(){var k=c.dataset.k,a=k.split("_"),x=P.filter(function(y){return y.pos==a[0]})[0];if(c.checked===!!x[a[1]])delete pend[k];else pend[k]=c.checked;try{localStorage.setItem("k51mat",JSON.stringify(pend))}catch(e){}renderMat()}});
+  var all=[];MAT.bestellungen.forEach(function(b){b.positionen.forEach(function(x){all.push([b,x])})});
+  var g=all.filter(function(a){return mstate(a[0],a[1],"geliefert")}).length,v=all.filter(function(a){return mstate(a[0],a[1],"vorort")}).length;
+  document.getElementById("matKpis").innerHTML=[[MAT.bestellungen.length,"Bestellungen"],[all.length,"Positionen"],[g+" / "+all.length,"geliefert bzw. abgeholt"],[v+" / "+all.length,"vor Ort"]].map(function(k){return'<div class="kpi"><b>'+k[0]+'</b><span>'+k[1]+'</span></div>'}).join("");
+  document.getElementById("matAll").innerHTML=MAT.bestellungen.map(function(b){var hasBad=b.positionen.some(function(x){return x.bad});
+    function cb(x,k){var on=mstate(b,x,k),q=key(b,x,k),p=q in pend;return'<label style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" data-k="'+esc(q)+'"'+(on?" checked":"")+' aria-label="'+esc(x.artikel)+'"><span class="pill p-'+(p?"wait":on?"ok":"open")+'">'+(p?"noch melden":on?(x[k]?esc(x[k]):"ja"):"offen")+'</span></label>'}
+    return'<section><h2>'+esc(b.lieferant)+' · '+esc(b.titel)+'</h2><div class="note" style="margin-bottom:12px"><b>'+esc(b.bedarf)+'.</b> '+esc(b.hinweis)+'</div><div class="tbl"><table><thead><tr><th>Pos.</th><th>Artikel</th><th>Best.-Nr.</th><th>Menge</th>'+(hasBad?'<th>Bad</th>':'')+'<th>'+esc(b.label_geliefert||"Geliefert")+'</th><th>Vor Ort</th></tr></thead><tbody>'+
+    b.positionen.map(function(x){return'<tr><td class="num">'+x.pos+'</td><td>'+esc(x.artikel)+'</td><td class="num">'+esc(x.nr)+'</td><td class="num">'+x.menge+'</td>'+(hasBad?'<td>'+esc(x.bad||"")+'</td>':'')+'<td>'+cb(x,"geliefert")+'</td><td>'+cb(x,"vorort")+'</td></tr>'}).join("")+'</tbody></table></div></section>'}).join("");
+  document.querySelectorAll("#matAll input").forEach(function(c){c.onchange=function(){var q=c.dataset.k,f=findPos(q);if(c.checked===!!f.x[f.k])delete pend[q];else pend[q]=c.checked;try{localStorage.setItem("k51mat2",JSON.stringify(pend))}catch(e){}renderMat()}});
   var ks=Object.keys(pend),box=document.getElementById("matReport");box.hidden=!ks.length;
-  if(ks.length){var L={geliefert:"geliefert",vorort:"vor Ort"},lines=ks.map(function(k){var a=k.split("_"),x=P.filter(function(y){return y.pos==a[0]})[0];return"Pos. "+x.pos+" "+x.artikel+": "+L[a[1]]+" "+(pend[k]?"JA":"NEIN")});
+  if(ks.length){var lines=ks.map(function(q){var f=findPos(q),L=f.k==="vorort"?"vor Ort":(f.b.label_geliefert||"Geliefert").toLowerCase();return f.b.lieferant+" "+f.b.titel+", Pos. "+f.x.pos+" "+f.x.artikel+": "+L+" "+(pend[q]?"JA":"NEIN")});
     document.getElementById("matChanges").textContent=lines.join(" · ");
     document.getElementById("matMail").href="mailto:MCarpi@hautok.de?subject="+encodeURIComponent("Knappenberg 51 Material: Status")+"&body="+encodeURIComponent("Bitte auf der Projektseite übernehmen:\n\n"+lines.join("\n"))}
 }
-document.getElementById("matReset").onclick=function(){pend={};try{localStorage.removeItem("k51mat")}catch(e){}renderMat()};
+document.getElementById("matReset").onclick=function(){pend={};try{localStorage.removeItem("k51mat2")}catch(e){}renderMat()};
 function renderAll(){renderMat();renderStart();renderPlan();renderTalk();renderDec()}
 renderAll();
 var h=(location.hash||"").slice(1);if(["start","plan","talk","mat","dec","docs"].indexOf(h)>=0)show(h);
